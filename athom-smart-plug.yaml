@@ -52,8 +52,8 @@ logger:
 mdns:
   disabled: false
 
-web_server:
-  port: 80
+# web_server:
+#   port: 80
 
 wifi:
   # This spawns an AP with the device name and mac address with no password.
@@ -65,8 +65,8 @@ wifi:
 
 captive_portal:
 
-dashboard_import:
-  package_import_url: github://athom-tech/esp32-configs/athom-smart-plug.yaml
+# dashboard_import:
+#   package_import_url: github://athom-tech/esp32-configs/athom-smart-plug.yaml
 
 uart:
   rx_pin: GPIO20
