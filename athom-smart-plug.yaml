@@ -109,27 +109,27 @@ binary_sensor:
         then:
           - button.press: Reset
 sensor:
-  - platform: uptime
-    name: "Uptime Sensor"
-    id: uptime_sensor
-    entity_category: diagnostic
-    internal: true
+  # - platform: uptime
+  #   name: "Uptime Sensor"
+  #   id: uptime_sensor
+  #   entity_category: diagnostic
+  #   internal: true
 
-  - platform: wifi_signal
-    name: "WiFi Signal"
-    id: wifi_signal_db
-    update_interval: 60s
-    entity_category: diagnostic
-    internal: true
+  # - platform: wifi_signal
+  #   name: "WiFi Signal"
+  #   id: wifi_signal_db
+  #   update_interval: 60s
+  #   entity_category: diagnostic
+  #   internal: true
 
-  # Reports the WiFi signal strength in %
-  - platform: copy
-    source_id: wifi_signal_db
-    name: "WiFi Strength"
-    filters:
-      - lambda: return min(max(2 * (x + 100.0), 0.0), 100.0);
-    unit_of_measurement: "%"
-    entity_category: diagnostic
+  # # Reports the WiFi signal strength in %
+  # - platform: copy
+  #   source_id: wifi_signal_db
+  #   name: "WiFi Strength"
+  #   filters:
+  #     - lambda: return min(max(2 * (x + 100.0), 0.0), 100.0);
+  #   unit_of_measurement: "%"
+  #   entity_category: diagnostic
     
   - platform: cse7766
     current:
@@ -185,14 +185,14 @@ sensor:
       return id(total_energy);
     update_interval: ${sensor_update_interval}
 
-  - platform: total_daily_energy
-    name: "Total Daily Energy"
-    restore: true
-    power_id: power_sensor
-    unit_of_measurement: kWh
-    accuracy_decimals: 3
-    filters:
-      - multiply: 0.001
+  # - platform: total_daily_energy
+  #   name: "Total Daily Energy"
+  #   restore: true
+  #   power_id: power_sensor
+  #   unit_of_measurement: kWh
+  #   accuracy_decimals: 3
+  #   filters:
+  #     - multiply: 0.001
 
 button:
   - platform: restart
@@ -225,50 +225,50 @@ light:
       inverted: true
       number: GPIO6
 
-text_sensor:
-  - platform: wifi_info
-    ip_address:
-      name: "IP Address"
-      entity_category: diagnostic
-    ssid:
-      name: "Connected SSID"
-      entity_category: diagnostic
-    mac_address:
-      name: "Mac Address"
-      entity_category: diagnostic
+# text_sensor:
+#   - platform: wifi_info
+#     ip_address:
+#       name: "IP Address"
+#       entity_category: diagnostic
+#     ssid:
+#       name: "Connected SSID"
+#       entity_category: diagnostic
+#     mac_address:
+#       name: "Mac Address"
+#       entity_category: diagnostic
 
-  #  Creates a sensor showing when the device was last restarted
-  - platform: template
-    name: 'Device Last Restart'
-    id: device_last_restart
-    icon: mdi:clock
-    entity_category: diagnostic
-#    device_class: timestamp
+#   #  Creates a sensor showing when the device was last restarted
+#   - platform: template
+#     name: 'Device Last Restart'
+#     id: device_last_restart
+#     icon: mdi:clock
+#     entity_category: diagnostic
+# #    device_class: timestamp
 
-  #  Creates a sensor of the uptime of the device, in formatted days, hours, minutes and seconds
-  - platform: template
-    name: "Device Uptime"
-    entity_category: diagnostic
-    lambda: |-
-      int seconds = (id(uptime_sensor).state);
-      int days = seconds / (24 * 3600);
-      seconds = seconds % (24 * 3600);
-      int hours = seconds / 3600;
-      seconds = seconds % 3600;
-      int minutes = seconds /  60;
-      seconds = seconds % 60;
-      if ( days > 3650 ) {
-        return { "Starting up" };
-      } else if ( days ) {
-        return { (String(days) +"d " + String(hours) +"h " + String(minutes) +"m "+ String(seconds) +"s").c_str() };
-      } else if ( hours ) {
-        return { (String(hours) +"h " + String(minutes) +"m "+ String(seconds) +"s").c_str() };
-      } else if ( minutes ) {
-        return { (String(minutes) +"m "+ String(seconds) +"s").c_str() };
-      } else {
-        return { (String(seconds) +"s").c_str() };
-      }
-    icon: mdi:clock-start
+#   #  Creates a sensor of the uptime of the device, in formatted days, hours, minutes and seconds
+#   - platform: template
+#     name: "Device Uptime"
+#     entity_category: diagnostic
+#     lambda: |-
+#       int seconds = (id(uptime_sensor).state);
+#       int days = seconds / (24 * 3600);
+#       seconds = seconds % (24 * 3600);
+#       int hours = seconds / 3600;
+#       seconds = seconds % 3600;
+#       int minutes = seconds /  60;
+#       seconds = seconds % 60;
+#       if ( days > 3650 ) {
+#         return { "Starting up" };
+#       } else if ( days ) {
+#         return { (String(days) +"d " + String(hours) +"h " + String(minutes) +"m "+ String(seconds) +"s").c_str() };
+#       } else if ( hours ) {
+#         return { (String(hours) +"h " + String(minutes) +"m "+ String(seconds) +"s").c_str() };
+#       } else if ( minutes ) {
+#         return { (String(minutes) +"m "+ String(seconds) +"s").c_str() };
+#       } else {
+#         return { (String(seconds) +"s").c_str() };
+#       }
+#     icon: mdi:clock-start
     
 time:
   - platform: sntp
@@ -278,13 +278,13 @@ time:
   # Change sync interval from default 5min to 6 hours
     update_interval: 360min    
   # Publish the time the device was last restarted
-    on_time_sync:
-      then:
-        # Update last restart time, but only once.
-        - if:
-            condition:
-              lambda: 'return id(device_last_restart).state == "";'
-            then:
-              - text_sensor.template.publish:
-                  id: device_last_restart
-                  state: !lambda 'return id(sntp_time).now().strftime("%a %d %b %Y - %I:%M:%S %p");'
+    # on_time_sync:
+    #   then:
+    #     # Update last restart time, but only once.
+    #     - if:
+    #         condition:
+    #           lambda: 'return id(device_last_restart).state == "";'
+    #         then:
+    #           - text_sensor.template.publish:
+    #               id: device_last_restart
+    #               state: !lambda 'return id(sntp_time).now().strftime("%a %d %b %Y - %I:%M:%S %p");'
