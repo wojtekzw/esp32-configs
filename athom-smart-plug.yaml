@@ -108,7 +108,7 @@ binary_sensor:
           - ON for at least 4s
         then:
           - button.press: Reset
-sensor:
+# sensor:
   # - platform: uptime
   #   name: "Uptime Sensor"
   #   id: uptime_sensor
