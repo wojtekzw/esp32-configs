@@ -86,28 +86,28 @@ uart:
 #     restore_value: yes
 #     initial_value: '0.0'
 
-# binary_sensor:
-#   # - platform: status
-#   #   name: "Status"
-#   #   entity_category: diagnostic    
+binary_sensor:
+  - platform: status
+    name: "Status"
+    entity_category: diagnostic    
 
-#   - platform: gpio
-#     pin:
-#       number: GPIO3
-#       mode: INPUT_PULLUP
-#       inverted: true
-#     name: "Power Button"
-#     disabled_by_default: true
-#     on_multi_click:
-#       - timing:
-#           - ON for at most 1s
-#           - OFF for at least 0.2s
-#         then:
-#           - switch.toggle: relay
-#       - timing:
-#           - ON for at least 4s
-#         then:
-#           - button.press: Reset
+  - platform: gpio
+    pin:
+      number: GPIO3
+      mode: INPUT_PULLUP
+      inverted: true
+    name: "Power Button"
+    disabled_by_default: true
+    on_multi_click:
+      - timing:
+          - ON for at most 1s
+          - OFF for at least 0.2s
+        then:
+          - switch.toggle: relay
+      - timing:
+          - ON for at least 4s
+        then:
+          - button.press: Reset
 # sensor:
   # - platform: uptime
   #   name: "Uptime Sensor"
@@ -270,21 +270,21 @@ light:
 #       }
 #     icon: mdi:clock-start
     
-# time:
-#   - platform: sntp
-#     id: sntp_time
-#   # Define the timezone of the device
-#     timezone: "${timezone}"
-#   # Change sync interval from default 5min to 6 hours
-#     update_interval: 360min    
-#   # Publish the time the device was last restarted
-#     # on_time_sync:
-#     #   then:
-#     #     # Update last restart time, but only once.
-#     #     - if:
-#     #         condition:
-#     #           lambda: 'return id(device_last_restart).state == "";'
-#     #         then:
-#     #           - text_sensor.template.publish:
-#     #               id: device_last_restart
-#     #               state: !lambda 'return id(sntp_time).now().strftime("%a %d %b %Y - %I:%M:%S %p");'
+time:
+  - platform: sntp
+    id: sntp_time
+  # Define the timezone of the device
+    timezone: "${timezone}"
+  # Change sync interval from default 5min to 6 hours
+    update_interval: 360min    
+  # Publish the time the device was last restarted
+    # on_time_sync:
+    #   then:
+    #     # Update last restart time, but only once.
+    #     - if:
+    #         condition:
+    #           lambda: 'return id(device_last_restart).state == "";'
+    #         then:
+    #           - text_sensor.template.publish:
+    #               id: device_last_restart
+    #               state: !lambda 'return id(sntp_time).now().strftime("%a %d %b %Y - %I:%M:%S %p");'
