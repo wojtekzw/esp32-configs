@@ -131,59 +131,59 @@ sensor:
   #   unit_of_measurement: "%"
   #   entity_category: diagnostic
     
-  - platform: cse7766
-    current:
-      name: "Current"
-      filters:
-          - throttle_average: ${sensor_update_interval}
-          - lambda: if (x < 0.060) return 0.0; else return x;   #For the chip will report less than 3w power when no load is connected
-      on_value_range:
-        - above: ${current_limit}
-          then:
-            - switch.turn_off: relay
+  # - platform: cse7766
+  #   current:
+  #     name: "Current"
+  #     filters:
+  #         - throttle_average: ${sensor_update_interval}
+  #         - lambda: if (x < 0.060) return 0.0; else return x;   #For the chip will report less than 3w power when no load is connected
+  #     on_value_range:
+  #       - above: ${current_limit}
+  #         then:
+  #           - switch.turn_off: relay
 
-    voltage:
-      name: "Voltage"
-      filters:
-          - throttle_average: ${sensor_update_interval}
+  #   voltage:
+  #     name: "Voltage"
+  #     filters:
+  #         - throttle_average: ${sensor_update_interval}
 
-    power:
-      name: "Power"
-      id: power_sensor
-      filters:
-          - throttle_average: ${sensor_update_interval}
-          - lambda: if (x < 3.0) return 0.0; else return x;    #For the chip will report less than 3w power when no load is connected
+  #   power:
+  #     name: "Power"
+  #     id: power_sensor
+  #     filters:
+  #         - throttle_average: ${sensor_update_interval}
+  #         - lambda: if (x < 3.0) return 0.0; else return x;    #For the chip will report less than 3w power when no load is connected
 
 
-    energy:
-      name: "Energy"
-      id: energy
-      unit_of_measurement: kWh
-      filters:
-        - throttle_average: ${sensor_update_interval}
-        # Multiplication factor from W to kW is 0.001
-        - multiply: 0.001
-        - filter_out: nan
-      on_value:
-        then:
-          - lambda: |-
-              static float previous_energy_value = 0.0;
-              float current_energy_value = id(energy).state;
-              id(total_energy) += current_energy_value - previous_energy_value;
-              previous_energy_value = current_energy_value;
-              id(total_energy_sensor).update();
+  #   energy:
+  #     name: "Energy"
+  #     id: energy
+  #     unit_of_measurement: kWh
+  #     filters:
+  #       - throttle_average: ${sensor_update_interval}
+  #       # Multiplication factor from W to kW is 0.001
+  #       - multiply: 0.001
+  #       - filter_out: nan
+  #     on_value:
+  #       then:
+  #         - lambda: |-
+  #             static float previous_energy_value = 0.0;
+  #             float current_energy_value = id(energy).state;
+  #             id(total_energy) += current_energy_value - previous_energy_value;
+  #             previous_energy_value = current_energy_value;
+  #             id(total_energy_sensor).update();
 
-  - platform: template
-    name: "Total Energy"
-    id: total_energy_sensor
-    unit_of_measurement: kWh
-    device_class: "energy"
-    state_class: "total_increasing"
-    icon: "mdi:lightning-bolt"
-    accuracy_decimals: 3
-    lambda: |-
-      return id(total_energy);
-    update_interval: ${sensor_update_interval}
+  # - platform: template
+  #   name: "Total Energy"
+  #   id: total_energy_sensor
+  #   unit_of_measurement: kWh
+  #   device_class: "energy"
+  #   state_class: "total_increasing"
+  #   icon: "mdi:lightning-bolt"
+  #   accuracy_decimals: 3
+  #   lambda: |-
+  #     return id(total_energy);
+  #   update_interval: ${sensor_update_interval}
 
   # - platform: total_daily_energy
   #   name: "Total Daily Energy"
@@ -195,19 +195,19 @@ sensor:
   #     - multiply: 0.001
 
 button:
-  - platform: restart
-    name: "Restart"
-    entity_category: config
+#   - platform: restart
+#     name: "Restart"
+#     entity_category: config
 
   - platform: factory_reset
     name: "Factory Reset"
     id: Reset
     entity_category: config
 
-  - platform: safe_mode
-    name: "Safe Mode"
-    internal: false
-    entity_category: config
+#   - platform: safe_mode
+#     name: "Safe Mode"
+#     internal: false
+#     entity_category: config
 
 switch:
   - platform: gpio
@@ -270,21 +270,21 @@ light:
 #       }
 #     icon: mdi:clock-start
     
-time:
-  - platform: sntp
-    id: sntp_time
-  # Define the timezone of the device
-    timezone: "${timezone}"
-  # Change sync interval from default 5min to 6 hours
-    update_interval: 360min    
-  # Publish the time the device was last restarted
-    # on_time_sync:
-    #   then:
-    #     # Update last restart time, but only once.
-    #     - if:
-    #         condition:
-    #           lambda: 'return id(device_last_restart).state == "";'
-    #         then:
-    #           - text_sensor.template.publish:
-    #               id: device_last_restart
-    #               state: !lambda 'return id(sntp_time).now().strftime("%a %d %b %Y - %I:%M:%S %p");'
+# time:
+#   - platform: sntp
+#     id: sntp_time
+#   # Define the timezone of the device
+#     timezone: "${timezone}"
+#   # Change sync interval from default 5min to 6 hours
+#     update_interval: 360min    
+#   # Publish the time the device was last restarted
+#     # on_time_sync:
+#     #   then:
+#     #     # Update last restart time, but only once.
+#     #     - if:
+#     #         condition:
+#     #           lambda: 'return id(device_last_restart).state == "";'
+#     #         then:
+#     #           - text_sensor.template.publish:
+#     #               id: device_last_restart
+#     #               state: !lambda 'return id(sntp_time).now().strftime("%a %d %b %Y - %I:%M:%S %p");'
